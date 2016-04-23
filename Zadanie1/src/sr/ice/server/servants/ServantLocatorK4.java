@@ -1,7 +1,5 @@
 package sr.ice.server.servants;
 
-import java.io.BufferedReader;
-
 import Ice.Current;
 import Ice.LocalObjectHolder;
 import Ice.Object;
@@ -13,6 +11,7 @@ public class ServantLocatorK4 implements Ice.ServantLocator{
 	
 	public ServantLocatorK4() {
 		calc = new CalcI();
+		calc.setCategory("K4");
 	}
 
 	@Override

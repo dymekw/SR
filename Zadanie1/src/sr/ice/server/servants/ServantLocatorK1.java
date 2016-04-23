@@ -56,6 +56,7 @@ public class ServantLocatorK1 implements Ice.ServantLocator{
 				calc = new CalcI();
 			}
 		}
+		calc.setCategory("K1");
 		adapter.add(calc, new Identity("calcK1", "K1"));
 		return calc;
 	}

@@ -19,6 +19,7 @@ public class CalcI extends _CalcDisp {
 	private static final long serialVersionUID = -2448962912780867770L;
 	private static AtomicInteger id = new AtomicInteger(0);
 	private int ID;
+	private String cat;
 
 	public CalcI() {
 		System.out.println("New CalcI ID: " + id);
@@ -34,10 +35,14 @@ public class CalcI extends _CalcDisp {
 	public int getID() {
 		return ID;
 	}
+	
+	public void setCategory(String cat) {
+		this.cat = cat;
+	}
 
 	@Override
 	public String compute(int a, int b, Operation op, Current __current) {
-		System.out.println("CalcI.compute()\tID: " + ID);
+		System.out.println("CalcI.compute()\tID: " + ID + " category: " + cat);
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {

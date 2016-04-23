@@ -9,37 +9,14 @@ module Demo
 	exception RequestCanceledException
 	{
 	};
+	
+	enum Operation {Add, Sub, Mul, Dev, Mod, Pow};
 
 	interface Calc
 	{
-		float add1(float a, float b);
-		["amd"] float add2(float a, float b) throws RequestCanceledException;
-		float subtract(float a, float b);
+		double compute(int a, int b, Operation op);
+		//["amd"] float add2(float a, float b) throws RequestCanceledException;
 	};
-	
-	
-
-	struct Name
-	{
-		string firstName;
-		string lastName;
-	};
-	
-	interface User
-	{
-		long getId();
-		Name getName();
-		void changeName(Name name1); 	
-	};
-	
-	sequence<User*> Users;
-	
-	interface UserManagement
-	{
-		User* createUser();
-		Users findUsers(string template);
-	};
-
 };
 
 #endif

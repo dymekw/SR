@@ -9,68 +9,56 @@
 
 package sr.ice.impl;
 
-import Demo.AMD_Calc_add2;
-import Demo.RequestCanceledException;
+import Demo.Operation;
 import Demo._CalcDisp;
 import Ice.Current;
-import sr.ice.server.WorkQueue;
 
-public class CalcI extends _CalcDisp
-{
-
+public class CalcI extends _CalcDisp {
 	private static final long serialVersionUID = -2448962912780867770L;
-    private WorkQueue _workQueue;
 
-    public CalcI()
-    {
-        _workQueue = null;
-    }
-
-    
-    public CalcI(WorkQueue workQueue)
-    {
-        _workQueue = workQueue;
-    }
-
-	
 	@Override
-	public float add1(float a, float b, Current __current) 
-	{
-        /*try
-        {
-            Thread.sleep(2000);
-        }
-        catch(java.lang.InterruptedException ex)
-        {
-        }*/
-
-		System.out.println("ADD: a = " + a + ", b = " + b + ", result = " + (a+b));
+	public double compute(int a, int b, Operation op, Current __current) {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
-		return a + b;
+		
+		double result = 0;
+
+		switch (op) {
+		case Add:
+			result = a + b;
+			break;
+		case Dev:
+			if (b != 0) {
+				result = a / (double) b;
+			}
+			break;
+		case Mod:
+			result = a % b;
+			break;
+		case Mul:
+			result = a * b;
+			break;
+		case Pow:
+			result = Math.pow(a, b);
+			break;
+		case Sub:
+			result = a - b;
+			break;
+		default:
+			break;
+		}
+
+		return result;
 	}
 
-	@Override
-	public float subtract(float a, float b, Current __current) 
-	{
-		System.out.println("ADD: a = " + a + ", b = " + b + ", result = " + (a-b));
-	
-		return a - b;
-	}
+	/*@Override
+	public void add2_async(AMD_Calc_add2 __cb, float a, float b, Current __current) throws RequestCanceledException {
+		// TODO Auto-generated method stub
 
-	@Override
-	public void add2_async(AMD_Calc_add2 __cb, float a, float b, Current __current) throws RequestCanceledException 
-	{
-        if(a < 10 && b < 10) //zadanie jest proste
-        {
-            System.out.println("ADD (immediate): a = " + a + ", b = " + b + ", result = " + (a+b));
-            __cb.ice_response(a+b);
-        }
-        else //zadanie jest skomplikowane
-        {
-            _workQueue.addTask(__cb, 5000, a, b);
-        }
-	}
-
-
+	}*/
 
 }

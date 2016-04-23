@@ -10,8 +10,9 @@
 package sr.ice.server;
 
 
-import Ice.Identity;
-import sr.ice.impl.CalcI;
+import sr.ice.server.servants.ServantLocatorK1;
+import sr.ice.server.servants.ServantLocatorK2;
+import sr.ice.server.servants.ServantLocatorK4;
 
 public class Server
 {
@@ -22,34 +23,22 @@ public class Server
 
 		try
 		{
-			// 1. Inicjalizacja ICE
 			communicator = Ice.Util.initialize(args);
-
-			// 2. Konfiguracja adaptera
-			// METODA 1 (polecana): Konfiguracja adaptera Adapter1 jest w pliku konfiguracyjnym podanym jako parametr uruchomienia serwera
 			//Ice.ObjectAdapter adapter = communicator.createObjectAdapter("Adapter1");  
-			
-			// METODA 2 (niepolecana): Konfiguracja adaptera Adapter1 jest w kodzie Ÿród³owym
 			Ice.ObjectAdapter adapter = communicator.createObjectAdapterWithEndpoints("Adapter1", 
 					"tcp -h localhost -p 10000:udp -h localhost -p 10000");
 
-			// 3. Stworzenie serwanta/serwantów
-			
-			CalcI calcServant1 = new CalcI();
+			//CalcI calcServant1 = new CalcI();
 
+			//adapter.add(calcServant1, new Identity("calc11", "calc"));
 			
-			// zad07
-		    //WorkQueue workQueue = new WorkQueue(); 
-		    //CalcI calcServant2 = new CalcI(workQueue);      
-		    //workQueue.start();	        
-
-		    
-			// 4. Dodanie wpisów do ASM
-			adapter.add(calcServant1, new Identity("calc11", "calc"));
-	        //adapter.add(calcServant2, new Identity("calc77", "calc"));
+			Ice.ServantLocator servantK1 = new ServantLocatorK1(adapter);
+			Ice.ServantLocator servantK2 = new ServantLocatorK2();
+			Ice.ServantLocator servantK4 = new ServantLocatorK4();
+			adapter.addServantLocator(servantK1, "K1");
+			adapter.addServantLocator(servantK2, "K2");
+			adapter.addServantLocator(servantK4, "K4");
 	        
-
-	        // 5. Aktywacja adaptera i przejœcie w pêtlê przetwarzania ¿¹dañ
 			adapter.activate();
 			System.out.println("Entering event processing loop...");
 			communicator.waitForShutdown();

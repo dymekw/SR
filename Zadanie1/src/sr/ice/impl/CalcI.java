@@ -9,22 +9,41 @@
 
 package sr.ice.impl;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import Demo.Operation;
 import Demo._CalcDisp;
 import Ice.Current;
 
 public class CalcI extends _CalcDisp {
 	private static final long serialVersionUID = -2448962912780867770L;
+	private static AtomicInteger id = new AtomicInteger(0);
+	private int ID;
+
+	public CalcI() {
+		System.out.println("New CalcI ID: " + id);
+		ID = id.getAndIncrement();
+	}
+
+	public CalcI(int ID) {
+		ID++;
+		System.out.println("Loaded CalcI ID: " + ID);
+		this.ID = ID;
+	}
+
+	public int getID() {
+		return ID;
+	}
 
 	@Override
-	public double compute(int a, int b, Operation op, Current __current) {
+	public String compute(int a, int b, Operation op, Current __current) {
+		System.out.println("CalcI.compute()\tID: " + ID);
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		double result = 0;
 
 		switch (op) {
@@ -37,7 +56,9 @@ public class CalcI extends _CalcDisp {
 			}
 			break;
 		case Mod:
-			result = a % b;
+			if (b != 0) {
+				result = a % b;
+			}
 			break;
 		case Mul:
 			result = a * b;
@@ -52,13 +73,17 @@ public class CalcI extends _CalcDisp {
 			break;
 		}
 
-		return result;
+		String resultStr = a + " " + op.toString() + " " + b + " = " + result;
+		System.out.println(resultStr);
+		return resultStr;
 	}
 
-	/*@Override
-	public void add2_async(AMD_Calc_add2 __cb, float a, float b, Current __current) throws RequestCanceledException {
-		// TODO Auto-generated method stub
-
-	}*/
+	/*
+	 * @Override public void add2_async(AMD_Calc_add2 __cb, float a, float b,
+	 * Current __current) throws RequestCanceledException { // TODO
+	 * Auto-generated method stub
+	 * 
+	 * }
+	 */
 
 }

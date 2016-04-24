@@ -21,8 +21,7 @@ public class ServantLocatorK2 implements Ice.ServantLocator{
 	@Override
 	public Object locate(Current arg0, LocalObjectHolder arg1) throws UserException {
 		System.out.println("ServantLocatorK2.locate()");
-		CalcI result = new CalcI();
-		result.setCategory("K2");
+		CalcI result = new CalcI("K2");
 		return result;
 	}
 

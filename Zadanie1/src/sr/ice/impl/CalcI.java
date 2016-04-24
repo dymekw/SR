@@ -9,6 +9,8 @@
 
 package sr.ice.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import Demo.Operation;
@@ -17,32 +19,39 @@ import Ice.Current;
 
 public class CalcI extends _CalcDisp {
 	private static final long serialVersionUID = -2448962912780867770L;
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+
 	private static AtomicInteger id = new AtomicInteger(0);
 	private int ID;
 	private String cat;
+	private long creationTime;
 
-	public CalcI() {
+	public CalcI(String cat) {
 		System.out.println("New CalcI ID: " + id);
 		ID = id.getAndIncrement();
+		creationTime = Calendar.getInstance().getTimeInMillis();
+		this.cat = cat;
 	}
 
-	public CalcI(int ID) {
-		ID++;
-		System.out.println("Loaded CalcI ID: " + ID);
-		this.ID = ID;
+	public CalcI(String cat, long creationTime) {
+		System.out.println("New CalcI ID: " + id);
+		ID = id.getAndIncrement();
+		this.creationTime = creationTime;
+		this.cat = cat;
 	}
 
 	public int getID() {
 		return ID;
 	}
-	
-	public void setCategory(String cat) {
-		this.cat = cat;
+
+	public long getCreationTime() {
+		return creationTime;
 	}
 
 	@Override
 	public String compute(int a, int b, Operation op, Current __current) {
-		System.out.println("CalcI.compute()\tID: " + ID + " category: " + cat);
+		System.out.println(
+				"CalcI.compute()\tID: " + ID + " category: " + cat + " creation time: " + sdf.format(creationTime));
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {

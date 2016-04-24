@@ -12,6 +12,7 @@ package sr.ice.server;
 
 import sr.ice.server.servants.ServantLocatorK1;
 import sr.ice.server.servants.ServantLocatorK2;
+import sr.ice.server.servants.ServantLocatorK3;
 import sr.ice.server.servants.ServantLocatorK4;
 
 public class Server
@@ -34,9 +35,11 @@ public class Server
 			
 			Ice.ServantLocator servantK1 = new ServantLocatorK1(adapter);
 			Ice.ServantLocator servantK2 = new ServantLocatorK2();
+			Ice.ServantLocator servantK3 = new ServantLocatorK3();
 			Ice.ServantLocator servantK4 = new ServantLocatorK4();
 			adapter.addServantLocator(servantK1, "K1");
 			adapter.addServantLocator(servantK2, "K2");
+			adapter.addServantLocator(servantK3, "K3");
 			adapter.addServantLocator(servantK4, "K4");
 	        
 			adapter.activate();

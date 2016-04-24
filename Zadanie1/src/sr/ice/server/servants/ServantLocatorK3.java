@@ -16,8 +16,7 @@ public class ServantLocatorK3 implements ServantLocator{
 	
 	public ServantLocatorK3() {
 		for (int i=0; i<N; i++) {
-			CalcI tmp = new CalcI();
-			tmp.setCategory("K3");
+			CalcI tmp = new CalcI("K3");
 			calcs.add(tmp);
 		}
 	}

@@ -33,7 +33,7 @@ public class ServantLocatorK1 implements Ice.ServantLocator{
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(System.getProperty("user.dir") + "\\servant.txt");
-			writer.println(calc.getID());
+			writer.println(calc.getCreationTime());
 			writer.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -49,14 +49,13 @@ public class ServantLocatorK1 implements Ice.ServantLocator{
 				String sCurrentLine;
 				br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\servant.txt"));
 				sCurrentLine = br.readLine();
-				int id = Integer.parseInt(sCurrentLine);
-				calc = new CalcI(id);
+				long creationTime = Long.parseLong(sCurrentLine);
+				calc = new CalcI("K1", creationTime);
 			} catch (Exception e) {
 				e.printStackTrace();
-				calc = new CalcI();
+				calc = new CalcI("K1");
 			}
 		}
-		calc.setCategory("K1");
 		adapter.add(calc, new Identity("calcK1", "K1"));
 		return calc;
 	}

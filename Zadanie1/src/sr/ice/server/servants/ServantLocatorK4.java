@@ -10,8 +10,7 @@ public class ServantLocatorK4 implements Ice.ServantLocator{
 	private CalcI calc;
 	
 	public ServantLocatorK4() {
-		calc = new CalcI();
-		calc.setCategory("K4");
+		calc = new CalcI("K4");
 	}
 
 	@Override

@@ -27,13 +27,16 @@ public class Client {
 					"K1/calcK1:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
 			Ice.ObjectPrx base2 = communicator.stringToProxy(
 					"K2/calc11:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
+			Ice.ObjectPrx base3 = communicator.stringToProxy(
+					"K3/calc11:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
 			Ice.ObjectPrx base4 = communicator.stringToProxy(
 					"K4/calc11:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
 
 			CalcPrx calc1 = CalcPrxHelper.checkedCast(base1);
 			CalcPrx calc2 = CalcPrxHelper.checkedCast(base2);
+			CalcPrx calc3 = CalcPrxHelper.checkedCast(base3);
 			CalcPrx calc4 = CalcPrxHelper.checkedCast(base4);
-			if (calc1 == null || calc2 == null || calc4 == null)
+			if (calc1 == null || calc2 == null || calc3 == null || calc4 == null)
 				throw new Error("Invalid proxy");
 
 			Thread K1 = new Thread(new Runnable() {
@@ -52,6 +55,14 @@ public class Client {
 					}
 				}
 			});
+			Thread K3 = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					for (int i = 0; i < 10; i++) {
+						simpleTask(calc3, "K3");
+					}
+				}
+			});
 			Thread K4 = new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -63,13 +74,15 @@ public class Client {
 			
 			K1.start();
 			K2.start();
+			K3.start();
 			K4.start();
+			
 			
 			K1.join();
 			K2.join();
+			K3.join();
 			K4.join();
-
-			Thread.sleep(10000);
+			
 		} catch (Ice.LocalException e) {
 			e.printStackTrace();
 			status = 1;

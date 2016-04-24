@@ -14,6 +14,7 @@ import sr.ice.server.servants.ServantLocatorK1;
 import sr.ice.server.servants.ServantLocatorK2;
 import sr.ice.server.servants.ServantLocatorK3;
 import sr.ice.server.servants.ServantLocatorK4;
+import sr.ice.server.servants.ServantLocatorK5;
 
 public class Server
 {
@@ -37,10 +38,12 @@ public class Server
 			Ice.ServantLocator servantK2 = new ServantLocatorK2();
 			Ice.ServantLocator servantK3 = new ServantLocatorK3();
 			Ice.ServantLocator servantK4 = new ServantLocatorK4();
+			Ice.ServantLocator servantK5 = new ServantLocatorK5();
 			adapter.addServantLocator(servantK1, "K1");
 			adapter.addServantLocator(servantK2, "K2");
 			adapter.addServantLocator(servantK3, "K3");
 			adapter.addServantLocator(servantK4, "K4");
+			adapter.addServantLocator(servantK5, "K5");
 	        
 			adapter.activate();
 			System.out.println("Entering event processing loop...");

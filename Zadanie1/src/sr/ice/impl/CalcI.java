@@ -27,17 +27,17 @@ public class CalcI extends _CalcDisp {
 	private long creationTime;
 
 	public CalcI(String cat) {
-		System.out.println("New CalcI ID: " + id);
 		ID = id.getAndIncrement();
 		creationTime = Calendar.getInstance().getTimeInMillis();
 		this.cat = cat;
+		System.out.println("New CalcI ID: " + id + " creation time: " + sdf.format(creationTime));
 	}
 
-	public CalcI(String cat, long creationTime) {
-		System.out.println("New CalcI ID: " + id);
-		ID = id.getAndIncrement();
+	public CalcI(String cat, long creationTime, int ID) {
+		this.ID = ID;
 		this.creationTime = creationTime;
 		this.cat = cat;
+		System.out.println("New CalcI ID: " + id + " creation time: " + sdf.format(creationTime));
 	}
 
 	public int getID() {
@@ -91,13 +91,5 @@ public class CalcI extends _CalcDisp {
 		System.out.println(resultStr);
 		return resultStr;
 	}
-
-	/*
-	 * @Override public void add2_async(AMD_Calc_add2 __cb, float a, float b,
-	 * Current __current) throws RequestCanceledException { // TODO
-	 * Auto-generated method stub
-	 * 
-	 * }
-	 */
 
 }

@@ -6,10 +6,14 @@ import Ice.Object;
 import Ice.UserException;
 import sr.ice.impl.CalcI;
 
+/*
+ * obiekt dostêpowy do bazy danych
+ */
 public class ServantLocatorK4 implements Ice.ServantLocator{
 	private CalcI calc;
 	
 	public ServantLocatorK4() {
+		System.out.println("ServantLocatorK4.ServantLocatorK4()");
 		calc = new CalcI("K4");
 	}
 
@@ -25,7 +29,7 @@ public class ServantLocatorK4 implements Ice.ServantLocator{
 
 	@Override
 	public Object locate(Current arg0, LocalObjectHolder arg1) throws UserException {
-		System.out.println("ServantLocatorK4.locate()");
+		System.out.println("\nServantLocatorK4.locate()");
 		return calc;
 	}
 

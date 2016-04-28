@@ -15,7 +15,6 @@ module Demo
 	interface Calc
 	{
 		string compute(int a, int b, Operation op);
-		//["amd"] float add2(float a, float b) throws RequestCanceledException;
 	};
 };
 

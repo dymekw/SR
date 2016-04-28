@@ -25,14 +25,9 @@ public class Server
 
 		try
 		{
-			communicator = Ice.Util.initialize(args);
-			//Ice.ObjectAdapter adapter = communicator.createObjectAdapter("Adapter1");  
+			communicator = Ice.Util.initialize(args); 
 			Ice.ObjectAdapter adapter = communicator.createObjectAdapterWithEndpoints("Adapter1", 
 					"tcp -h localhost -p 10000:udp -h localhost -p 10000");
-
-			//CalcI calcServant1 = new CalcI();
-
-			//adapter.add(calcServant1, new Identity("calc11", "calc"));
 			
 			Ice.ServantLocator servantK1 = new ServantLocatorK1(adapter);
 			Ice.ServantLocator servantK2 = new ServantLocatorK2();

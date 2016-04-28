@@ -22,31 +22,35 @@ public class Client {
 		try {
 			communicator = Ice.Util.initialize(args);
 
-			// Ice.ObjectPrx base = communicator.propertyToProxy("Calc1.Proxy");
-			Ice.ObjectPrx base1 = communicator.stringToProxy(
-					"K1/calcK1:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
+			Ice.ObjectPrx base11 = communicator
+					.stringToProxy("K1/calc11:tcp -h localhost -p 10000:udp -h localhost -p 10000");
+			Ice.ObjectPrx base12 = communicator
+					.stringToProxy("K1/calc12:tcp -h localhost -p 10000:udp -h localhost -p 10000");
 
-			Ice.ObjectPrx base2 = communicator.stringToProxy(
-					"K2/calc11:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
+			Ice.ObjectPrx base2 = communicator
+					.stringToProxy("K2/calc21:tcp -h localhost -p 10000:udp -h localhost -p 10000");
 
-			Ice.ObjectPrx base31 = communicator.stringToProxy(
-					"K3/calc31:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
-			Ice.ObjectPrx base32 = communicator.stringToProxy(
-					"K3/calc32:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
-			Ice.ObjectPrx base33 = communicator.stringToProxy(
-					"K3/calc33:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
+			Ice.ObjectPrx base31 = communicator
+					.stringToProxy("K3/calc31:tcp -h localhost -p 10000:udp -h localhost -p 10000");
+			Ice.ObjectPrx base32 = communicator
+					.stringToProxy("K3/calc32:tcp -h localhost -p 10000:udp -h localhost -p 10000");
+			Ice.ObjectPrx base33 = communicator
+					.stringToProxy("K3/calc33:tcp -h localhost -p 10000:udp -h localhost -p 10000");
 
-			Ice.ObjectPrx base4 = communicator.stringToProxy(
-					"K4/calc11:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
+			Ice.ObjectPrx base4 = communicator
+					.stringToProxy("K4/calc41:tcp -h localhost -p 10000:udp -h localhost -p 10000");
 
-			Ice.ObjectPrx base51 = communicator.stringToProxy(
-					"K5/calc51:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
-			Ice.ObjectPrx base52 = communicator.stringToProxy(
-					"K5/calc52:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
-			Ice.ObjectPrx base53 = communicator.stringToProxy(
-					"K5/calc53:tcp -h localhost -p 10000:udp -h localhost -p 10000:ssl -h localhost -p 10001");
+			Ice.ObjectPrx base51 = communicator
+					.stringToProxy("K5/calc51:tcp -h localhost -p 10000:udp -h localhost -p 10000");
+			Ice.ObjectPrx base52 = communicator
+					.stringToProxy("K5/calc52:tcp -h localhost -p 10000:udp -h localhost -p 10000");
+			Ice.ObjectPrx base53 = communicator
+					.stringToProxy("K5/calc53:tcp -h localhost -p 10000:udp -h localhost -p 10000");
+			Ice.ObjectPrx base54 = communicator
+					.stringToProxy("K5/calc54:tcp -h localhost -p 10000:udp -h localhost -p 10000");
 
-			CalcPrx calc1 = CalcPrxHelper.checkedCast(base1);
+			CalcPrx calc11 = CalcPrxHelper.checkedCast(base11);
+			CalcPrx calc12 = CalcPrxHelper.checkedCast(base12);
 
 			CalcPrx calc2 = CalcPrxHelper.checkedCast(base2);
 
@@ -59,63 +63,36 @@ public class Client {
 			CalcPrx calc51 = CalcPrxHelper.checkedCast(base51);
 			CalcPrx calc52 = CalcPrxHelper.checkedCast(base52);
 			CalcPrx calc53 = CalcPrxHelper.checkedCast(base53);
+			CalcPrx calc54 = CalcPrxHelper.checkedCast(base54);
 
-			if (calc1 == null || calc2 == null || calc31 == null || calc32 == null || calc33 == null || calc4 == null
-					|| calc51 == null || calc52 == null || calc53 == null)
+			if (calc11 == null || calc12 == null || calc2 == null || calc31 == null || calc32 == null || calc33 == null || calc4 == null
+					|| calc51 == null || calc52 == null || calc53 == null || calc54 == null)
 				throw new Error("Invalid proxy");
 
-			Thread K1 = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					for (int i = 0; i < 10; i++) {
-						simpleTask(calc1, "K1");
-					}
-				}
-			});
-			Thread K2 = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					for (int i = 0; i < 10; i++) {
-						simpleTask(calc2, "K2");
-					}
-				}
-			});
-			Thread K3 = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					for (int i = 0; i < 3; i++) {
-						simpleTask(new CalcPrx[] { calc31, calc32, calc33 }, "K3");
-					}
-				}
-			});
-			Thread K4 = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					for (int i = 0; i < 10; i++) {
-						simpleTask(calc4, "K4");
-					}
-				}
-			});
-			Thread K5 = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					for (int i = 0; i < 10; i++) {
-						simpleTask(new CalcPrx[] {calc51, calc52, calc53}, "K5");
-					}
-				}
-			});
+			System.out.println("\n\nTest K1\n\n");
+			for (int i = 0; i < 10; i++) {
+				simpleTask(new CalcPrx[] {calc11, calc12}, "K1");
+			}
 
-			K1.start();
-			K2.start();
-			K3.start();
-			K4.start();
-			K5.start();
+			System.out.println("\n\nTest K2\n\n");
+			for (int i = 0; i < 10; i++) {
+				simpleTask(calc2, "K2");
+			}
 
-			K1.join();
-			K2.join();
-			K3.join();
-			K4.join();
-			K5.join();
+			System.out.println("\n\nTest K3\n\n");
+			for (int i = 0; i < 4; i++) {
+				simpleTask(new CalcPrx[] { calc31, calc32, calc33 }, "K3");
+			}
+
+			System.out.println("\n\nTest K4\n\n");
+			for (int i = 0; i < 10; i++) {
+				simpleTask(calc4, "K4");
+			}
+
+			System.out.println("\n\nTest K5\n\n");
+			for (int i = 0; i < 3; i++) {
+				simpleTask(new CalcPrx[] { calc51, calc52, calc53, calc54 }, "K5");
+			}
 
 		} catch (Ice.LocalException e) {
 			e.printStackTrace();
@@ -139,7 +116,7 @@ public class Client {
 
 	private static void simpleTask(CalcPrx calc, String category) {
 		try {
-			Thread.sleep(RANDOM.nextInt(500));
+			Thread.sleep(RANDOM.nextInt(50));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

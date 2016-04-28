@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import Ice.Current;
 import Ice.Identity;
@@ -15,13 +16,17 @@ import Ice.ServantLocator;
 import Ice.UserException;
 import sr.ice.impl.CalcI;
 
+/*
+ * obiekt reprezentuj¹cy grupê u¿ytkowników z³o¿onego systemu - u¿ytkownicy wykonuj¹ operacje na grupie 
+ * do której nale¿¹, grupy mniej u¿ywane s¹ usuwane z pamiêci
+ */
 public class ServantLocatorK5 implements ServantLocator {
 	private class EvictorEntry {
-		Ice.Object servant;
+		CalcI servant;
 		int useCount;
 	}
 
-	private static final int N = 2;
+	private static final int N = 3;
 	private Map<Ice.Identity, EvictorEntry> map = new HashMap<>();
 	private BufferedReader br;
 
@@ -38,20 +43,20 @@ public class ServantLocatorK5 implements ServantLocator {
 		EvictorEntry entry = (EvictorEntry) cookie;
 
 		--(entry.useCount);
-		evictServants();
 	}
 
 	@Override
 	synchronized public Object locate(Current c, LocalObjectHolder cookie) throws UserException {
+		System.out.println("\nServantLocatorK5.locate()");
 		EvictorEntry entry = map.get(c.id);
 		if (entry == null) {
 			entry = new EvictorEntry();
 			Ice.LocalObjectHolder cookieHolder = new Ice.LocalObjectHolder();
-			entry.servant = add(c, cookieHolder);
+			entry.useCount = 0;
+			entry.servant = add(c, cookieHolder, entry);
 			if (entry.servant == null) {
 				return null;
 			}
-			entry.useCount = 0;
 			evictServants(N - 1);
 			map.put(c.id, entry);
 		}
@@ -62,15 +67,18 @@ public class ServantLocatorK5 implements ServantLocator {
 		return entry.servant;
 	}
 
-	private Object add(Current c, LocalObjectHolder cookieHolder) {
+	private CalcI add(Current c, LocalObjectHolder cookieHolder, EvictorEntry entry) {
 		String fileName = c.id.category + c.id.name;
 		CalcI result = null;
 		try {
 			String sCurrentLine;
 			br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\" + fileName + ".txt"));
 			sCurrentLine = br.readLine();
-			long creationTime = Long.parseLong(sCurrentLine);
-			result = new CalcI("K5", creationTime);
+			String parts[] = sCurrentLine.split(" ");
+			int id = Integer.parseInt(parts[0]);
+			long creationTime = Long.parseLong(parts[1]);
+			result = new CalcI("K5", creationTime, id);
+			entry.useCount = Integer.parseInt(parts[2]);
 		} catch (Exception e) {
 			// e.printStackTrace();
 			result = new CalcI("K5");
@@ -78,12 +86,7 @@ public class ServantLocatorK5 implements ServantLocator {
 		return result;
 	}
 
-	private void evictServants() {
-		evictServants(N);
-	}
-
 	private void evictServants(int num) {
-		System.out.println("ServantLocatorK5.evictServants()");
 		int excessEntries = map.size();
 		EvictorEntry minEntry = null;
 		int min = Integer.MAX_VALUE;
@@ -92,7 +95,12 @@ public class ServantLocatorK5 implements ServantLocator {
 			minEntry = null;
 			min = Integer.MAX_VALUE;
 			for (EvictorEntry entry : map.values()) {
-				if (entry.useCount < min) {
+				if (entry.useCount <= min){
+					if (entry.useCount==min) {
+						if (new Random().nextBoolean()) {
+							continue;
+						}
+					}
 					min = entry.useCount;
 					minEntry = entry;
 				}
@@ -109,12 +117,12 @@ public class ServantLocatorK5 implements ServantLocator {
 	}
 
 	private void evict(Identity identity, EvictorEntry evictorEntry) {
-		System.out.println("ServantLocatorK5.evict()");
 		String fileName = identity.category + identity.name;
+		System.out.println("ServantLocatorK5.evict() " + fileName + "\t" + ((CalcI)evictorEntry.servant).getID());
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(System.getProperty("user.dir") + "\\" + fileName + ".txt");
-			writer.println(((CalcI) evictorEntry.servant).getCreationTime());
+			writer.println(evictorEntry.servant.getID() + " " + (evictorEntry.servant).getCreationTime() + " " + evictorEntry.useCount);
 			writer.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

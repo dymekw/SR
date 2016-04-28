@@ -10,11 +10,16 @@ import Ice.ServantLocator;
 import Ice.UserException;
 import sr.ice.impl.CalcI;
 
+/*
+ * gra internetowa - ka¿dy z serwntów reprezentuje np pojedyñczy serwer, 
+ * na którym mog¹ siê rejestrowaæ gracze
+ */
 public class ServantLocatorK3 implements ServantLocator{
 	private List<CalcI> calcs = new LinkedList<>();
 	private static final int N = 5;
 	
 	public ServantLocatorK3() {
+		System.out.println("ServantLocatorK3.ServantLocatorK3()");
 		for (int i=0; i<N; i++) {
 			CalcI tmp = new CalcI("K3");
 			calcs.add(tmp);
@@ -33,7 +38,7 @@ public class ServantLocatorK3 implements ServantLocator{
 
 	@Override
 	public Object locate(Current arg0, LocalObjectHolder arg1) throws UserException {
-		System.out.println("ServantLocatorK3.locate()");
+		System.out.println("\nServantLocatorK3.locate()");
 		CalcI result = calcs.get(0);
 		calcs.remove(result);
 		calcs.add(result);

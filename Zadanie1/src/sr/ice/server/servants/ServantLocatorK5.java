@@ -51,9 +51,8 @@ public class ServantLocatorK5 implements ServantLocator {
 		EvictorEntry entry = map.get(c.id);
 		if (entry == null) {
 			entry = new EvictorEntry();
-			Ice.LocalObjectHolder cookieHolder = new Ice.LocalObjectHolder();
 			entry.useCount = 0;
-			entry.servant = add(c, cookieHolder, entry);
+			entry.servant = add(c, entry);
 			if (entry.servant == null) {
 				return null;
 			}
@@ -67,7 +66,7 @@ public class ServantLocatorK5 implements ServantLocator {
 		return entry.servant;
 	}
 
-	private CalcI add(Current c, LocalObjectHolder cookieHolder, EvictorEntry entry) {
+	private CalcI add(Current c, EvictorEntry entry) {
 		String fileName = c.id.category + c.id.name;
 		CalcI result = null;
 		try {
